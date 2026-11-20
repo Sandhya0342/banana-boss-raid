@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <defs>
+    <!-- Background Glow Filter -->
+    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Metallic Banana Gradient -->
+    <linearGradient id="bananaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff176" />
+      <stop offset="50%" stop-color="#fbc02d" />
+      <stop offset="100%" stop-color="#f57f17" />
+    </linearGradient>
+
+    <!-- Cyber Armor Gradient -->
+    <linearGradient id="cyberArmor" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a148c" />
+      <stop offset="50%" stop-color="#311b92" />
+      <stop offset="100%" stop-color="#1a237e" />
+    </linearGradient>
+
+    <!-- Neon Cyan Energy -->
+    <linearGradient id="cyanEnergy" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00e5ff" />
+      <stop offset="100%" stop-color="#1de9b6" />
+    </linearGradient>
+
+    <!-- Gold Crown Gradient -->
+    <linearGradient id="goldCrown" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ff8f00" />
+      <stop offset="100%" stop-color="#ffd54f" />
+    </linearGradient>
+  </defs>
+
+  <!-- Cyber Aura Ring -->
+  <circle cx="150" cy="150" r="130" fill="none" stroke="url(#cyanEnergy)" stroke-width="3" stroke-dasharray="10 15" opacity="0.6">
+    <animateTransform attributeName="transform" type="rotate" from="0 150 150" to="360 150 150" dur="20s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Cyber Robotic Wings / Armor Panels -->
+  <g id="mecha-wings">
+    <!-- Left Wing -->
+    <path d="M 60 120 L 10 90 L 30 160 L 70 150 Z" fill="url(#cyberArmor)" stroke="#00e5ff" stroke-width="2" />
+    <path d="M 50 160 L 15 170 L 40 210 L 75 185 Z" fill="url(#cyberArmor)" stroke="#00e5ff" stroke-width="2" />
+    <!-- Right Wing -->
+    <path d="M 240 120 L 290 90 L 270 160 L 230 150 Z" fill="url(#cyberArmor)" stroke="#00e5ff" stroke-width="2" />
+    <path d="M 250 160 L 285 170 L 260 210 L 225 185 Z" fill="url(#cyberArmor)" stroke="#00e5ff" stroke-width="2" />
+  </g>
+
+  <!-- Banana Main Body -->
+  <path d="M 120 50 C 180 50 220 120 200 220 C 190 260 150 270 130 250 C 100 220 90 120 120 50 Z" 
+        fill="url(#bananaGrad)" stroke="#c43e00" stroke-width="4" filter="drop-shadow(0px 8px 12px rgba(0,0,0,0.5))" />
+
+  <!-- Banana Stem -->
+  <path d="M 120 50 C 115 35 125 20 140 15 L 148 20 C 135 25 130 38 132 50 Z" 
+        fill="#33691e" stroke="#1b5e20" stroke-width="2" />
+
+  <!-- Cyber Armor Chestplate -->
+  <path d="M 115 135 L 185 135 L 175 195 L 150 215 L 125 195 Z" 
+        fill="url(#cyberArmor)" stroke="#00e5ff" stroke-width="3" />
+
+  <!-- Chest Reactor Core (Pulsing Energy) -->
+  <circle cx="150" cy="170" r="16" fill="url(#cyanEnergy)" filter="url(#neon-glow)">
+    <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="150" cy="170" r="8" fill="#ffffff" />
+
+  <!-- Cyber Visor / Eyes -->
+  <g id="boss-visor">
+    <polygon points="125,100 175,100 170,115 130,115" fill="#111111" stroke="#00e5ff" stroke-width="1.5" />
+    <!-- Menacing Red Glowing Cyber Eye Slits -->
+    <line x1="132" y1="107" x2="145" y2="107" stroke="#ff1744" stroke-width="4" stroke-linecap="round" filter="url(#neon-glow)">
+      <animate attributeName="stroke" values="#ff1744;#ff5252;#ff1744" dur="1.5s" repeatCount="indefinite" />
+    </line>
+    <line x1="155" y1="107" x2="168" y2="107" stroke="#ff1744" stroke-width="4" stroke-linecap="round" filter="url(#neon-glow)">
+      <animate attributeName="stroke" values="#ff1744;#ff5252;#ff1744" dur="1.5s" repeatCount="indefinite" />
+    </line>
+  </g>
+
+  <!-- Golden King Crown -->
+  <g id="boss-crown" transform="translate(112, 10)">
+    <polygon points="0,35 15,10 38,25 61,10 76,35" fill="url(#goldCrown)" stroke="#e65100" stroke-width="2" />
+    <!-- Crown Jewels -->
+    <circle cx="15" cy="12" r="3.5" fill="#00e5ff" />
+    <circle cx="38" cy="27" r="4.5" fill="#d50000" />
+    <circle cx="61" cy="12" r="3.5" fill="#00e5ff" />
+  </g>
+
+  <!-- Tech Circuit Line Details -->
+  <path d="M 125 150 L 138 150 L 144 162" fill="none" stroke="#00e5ff" stroke-width="1.5" />
+  <path d="M 175 150 L 162 150 L 156 162" fill="none" stroke="#00e5ff" stroke-width="1.5" />
+</svg>

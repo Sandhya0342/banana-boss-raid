@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banana Boss Raid | CIS046-3 Software For Enterprise</title>
+  <meta name="description" content="A cooperative browser-based puzzle game for University of Bedfordshire CIS046-3.">
+  <link rel="icon" href="assets/banana-coin.svg" type="image/svg+xml">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ====================================================================== -->
+  <!-- TOAST NOTIFICATION CONTAINER                                           -->
+  <!-- ====================================================================== -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- ====================================================================== -->
+  <!-- NAVIGATION BAR                                                         -->
+  <!-- ====================================================================== -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <div class="brand-logo" id="nav-brand" role="button" tabindex="0">
+        <span class="brand-icon">🍌</span>
+        <div>
+          <div class="brand-title text-gradient">BANANA BOSS RAID</div>
+          <div class="brand-subtitle">CIS046-3 • Enterprise Software</div>
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <button id="nav-btn-dashboard" class="active">
+            <span>📊</span> Dashboard
+          </button>
+        </li>
+        <li class="nav-item">
+          <button id="nav-btn-puzzle">
+            <span>🧩</span> Solve Puzzles
+          </button>
+        </li>
+        <li class="nav-item">
+          <button id="nav-btn-boss">
+            <span>⚔️</span> Boss Raid
+          </button>
+        </li>
+        <li class="nav-item">
+          <button id="nav-btn-leaderboard">
+            <span>🏆</span> Leaderboard
+          </button>
+        </li>
+        <li class="nav-item">
+          <button id="nav-btn-evidence">
+            <span>📚</span> Architecture & Themes
+          </button>
+        </li>
+      </ul>
+
+      <div class="nav-auth-widget">
+        <!-- Guest View: Sign In / Register Buttons -->
+        <div id="nav-guest-section">
+          <button id="btn-open-auth-modal" class="btn btn-primary btn-sm">
+            <span>🔑</span> Sign In / Register
+          </button>
+        </div>
+
+        <!-- Authenticated View: User Pill & Logout -->
+        <div id="nav-user-section" style="display: none;">
+          <div class="user-badge">
+            <div class="user-avatar" id="nav-user-avatar">?</div>
+            <span class="user-name-text" id="nav-username">Player</span>
+            <div class="charges-badge" title="Attack charges available">
+              <span>⚡</span> <span id="nav-charge-count">0</span>
+            </div>
+          </div>
+          <button id="btn-logout" class="btn btn-outline btn-sm" title="Log out of session">
+            Log Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ====================================================================== -->
+  <!-- MAIN APPLICATION CONTAINER (SINGLE PAGE VIEW SWITCHER)                 -->
+  <!-- ====================================================================== -->
+  <main class="container">
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- VIEW 1: PLAYER DASHBOARD                                           -->
+    <!-- ------------------------------------------------------------------ -->
+    <section id="view-dashboard" class="view-panel active">
+      <div class="section-header">
+        <h2>Welcome to <span class="text-gradient">Banana Boss Raid</span></h2>
+        <p>A cooperative multiplayer enterprise puzzle game. Solve Banana API mathematical ciphers to power up energy charges and band together to defeat the shared raid boss!</p>
+      </div>
+
+      <!-- Quick Stats Grid -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🌟</div>
+          <div class="stat-info">
+            <span class="stat-label">Total Score</span>
+            <span class="stat-value" id="dash-total-score">0</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🧩</div>
+          <div class="stat-info">
+            <span class="stat-label">Puzzles Solved</span>
+            <span class="stat-value" id="dash-puzzles-solved">0</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">💥</div>
+          <div class="stat-info">
+            <span class="stat-label">Boss Damage Dealt</span>
+            <span class="stat-value" id="dash-boss-damage">0</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-info">
+            <span class="stat-label">Attack Charges</span>
+            <span class="stat-value" id="dash-attack-charges">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Banners -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 30px;">
+        <div class="card" style="border-left: 4px solid var(--banana-yellow);">
+          <h3 style="margin-bottom: 8px;">🧩 Solve Banana API Puzzles</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Fetch real-time image equations generated by the University of Bedfordshire Banana API. Each correct answer awards 10 points and charges your weapon.
+          </p>
+          <button id="dash-btn-start-puzzle" class="btn btn-primary">
+            Start Solving Puzzles
+          </button>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--cyan-neon);">
+          <h3 style="margin-bottom: 8px;">⚔️ Join the Shared Boss Battle</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Enter the raid arena where players worldwide work together against a shared boss. Consume your solved puzzle charges to deal damage!
+          </p>
+          <button id="dash-btn-join-boss" class="btn btn-cyan">
+            Enter Boss Raid Arena
+          </button>
+        </div>
+      </div>
+
+      <!-- How to Play Briefing -->
+      <div class="card">
+        <h3 style="margin-bottom: 14px;">🎮 Mission Briefing: How It Works</h3>
+        <ol style="padding-left: 20px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px;">
+          <li><strong>Virtual Identity:</strong> Create an account or sign in to save your personal statistics, persistent session, and leaderboard rankings.</li>
+          <li><strong>Interoperability:</strong> Our Node.js backend communicates securely with the external Banana API (<a href="https://marcconrad.com/uob/banana/doc.php" target="_blank" rel="noopener" style="color: var(--cyan-neon);">Documentation</a>) to fetch puzzles without revealing answers.</li>
+          <li><strong>Event-Driven Battle:</strong> Every puzzle solved and attack launched dispatches internal game events, dynamically syncing the cooperative boss health via REST polling.</li>
+          <li><strong>Cooperative Victory:</strong> All players attack the same health pool. When the boss falls, everyone celebrates and a new raid can begin!</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- VIEW 2: PUZZLE SYSTEM (BANANA API INTEROPERABILITY)                -->
+    <!-- ------------------------------------------------------------------ -->
+    <section id="view-puzzle" class="view-panel">
+      <div class="section-header">
+        <h2>Banana API <span class="text-gradient">Puzzle Cipher</span></h2>
+        <p>Study the banana equation below. Determine the numerical value (0-9) represented by the missing piece, submit your answer, and earn an attack charge.</p>
+      </div>
+
+      <div class="card puzzle-arena-card">
+        <div id="puzzle-source-indicator" class="puzzle-source-tag">
+          <span>📡</span> Official Banana API (JSON)
+        </div>
+
+        <!-- Puzzle Image Viewer -->
+        <div class="puzzle-image-box" id="puzzle-image-box">
+          <div class="spinner" id="puzzle-spinner"></div>
+          <img id="puzzle-image" src="" alt="Banana Math Puzzle" style="display: none;">
+        </div>
+
+        <!-- Feedback Alert Banner -->
+        <div id="puzzle-feedback" class="puzzle-feedback-banner"></div>
+
+        <!-- Numeric Answer Input -->
+        <div class="puzzle-input-row">
+          <label for="puzzle-answer-input" style="font-weight: 700; color: var(--text-secondary);">Your Answer (0-9):</label>
+          <input type="number" id="puzzle-answer-input" class="puzzle-input" min="0" max="9" placeholder="?" autocomplete="off">
+        </div>
+
+        <!-- Quick 0-9 Mobile Keypad -->
+        <div class="puzzle-keypad">
+          <button type="button" class="keypad-btn" data-val="0">0</button>
+          <button type="button" class="keypad-btn" data-val="1">1</button>
+          <button type="button" class="keypad-btn" data-val="2">2</button>
+          <button type="button" class="keypad-btn" data-val="3">3</button>
+          <button type="button" class="keypad-btn" data-val="4">4</button>
+          <button type="button" class="keypad-btn" data-val="5">5</button>
+          <button type="button" class="keypad-btn" data-val="6">6</button>
+          <button type="button" class="keypad-btn" data-val="7">7</button>
+          <button type="button" class="keypad-btn" data-val="8">8</button>
+          <button type="button" class="keypad-btn" data-val="9">9</button>
+        </div>
+
+        <!-- Submission Actions -->
+        <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+          <button id="btn-submit-puzzle" class="btn btn-primary btn-lg">
+            <span>✅</span> Submit Answer
+          </button>
+          <button id="btn-next-puzzle" class="btn btn-outline btn-lg">
+            <span>🔄</span> Next Puzzle
+          </button>
+          <button id="btn-puzzle-to-boss" class="btn btn-cyan btn-lg" style="display: none;">
+            <span>⚔️</span> Attack Boss Now!
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- VIEW 3: COOPERATIVE BOSS RAID ARENA                                -->
+    <!-- ------------------------------------------------------------------ -->
+    <section id="view-boss" class="view-panel">
+      <div class="section-header">
+        <h2>Cooperative <span class="text-gradient">Boss Raid Battle</span></h2>
+        <p>A shared multi-player battle. Solve puzzles to power up attack charges, then coordinate with players worldwide to defeat the boss.</p>
+      </div>
+
+      <div class="boss-arena-wrapper">
+        <!-- Main Boss Combat Card -->
+        <div class="boss-stage-card" id="boss-stage-card">
+          <!-- Floating damage notification container -->
+          <div id="damage-popup-container"></div>
+
+          <div class="boss-avatar-wrapper" id="boss-avatar-wrapper">
+            <img src="assets/boss.svg" alt="King Mecha-Banana Boss" class="boss-svg-image" id="boss-graphic">
+          </div>
+
+          <h3 class="boss-name-tag text-gradient" id="boss-name">King Mecha-Banana</h3>
+          <span class="boss-status-badge active" id="boss-status-badge">ACTIVE RAID</span>
+
+          <!-- Animated Health Bar -->
+          <div class="health-bar-container">
+            <div class="health-bar-fill" id="boss-health-fill" style="width: 100%;"></div>
+            <div class="health-bar-text" id="boss-health-text">500 / 500 HP (100%)</div>
+          </div>
+
+          <!-- Victory Notice (When Defeated) -->
+          <div id="boss-victory-box" style="display: none; background: rgba(16, 185, 129, 0.25); border: 2px solid var(--neon-green); border-radius: var(--radius-md); padding: 20px; margin: 16px 0;">
+            <h3 style="color: var(--neon-green); margin-bottom: 6px;">🎉 VICTORY! THE BOSS HAS FALLEN! 🎉</h3>
+            <p style="color: #fff; margin-bottom: 14px;">Great teamwork! All raid contributors have been credited on the global leaderboard.</p>
+            <button id="btn-restart-raid" class="btn btn-primary btn-lg">
+              <span>⚡</span> Spawn Next Boss Raid
+            </button>
+          </div>
+
+          <!-- Attack Console -->
+          <div class="attack-console" id="boss-attack-console">
+            <div class="attack-charge-status">
+              <span>Your Weapon Readiness:</span>
+              <span>Available Charges: <strong class="attack-charge-count" id="boss-charge-display">0</strong></span>
+            </div>
+
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+              <button id="btn-attack-boss" class="btn btn-primary btn-lg" style="flex: 1; min-width: 200px;">
+                <span>⚔️</span> Strike Boss (-25 HP)
+              </button>
+              <button id="btn-get-more-charges" class="btn btn-cyan btn-lg">
+                <span>🧩</span> Solve Puzzles for Charges
+              </button>
+            </div>
+            <small style="color: var(--text-muted);">Attacks deal 25 base damage with a 25% chance of a 50 DMG critical strike!</small>
+          </div>
+        </div>
+
+        <!-- Side Panel: Live Raid Feed & Participants -->
+        <div class="raid-side-panel">
+          <!-- Raid Contributors Table -->
+          <div class="card">
+            <h4 style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+              <span>🛡️ Raid Contributors</span>
+              <span style="font-size: 0.75rem; color: var(--cyan-neon);">Live Polling (3s)</span>
+            </h4>
+            <div style="max-height: 240px; overflow-y: auto;">
+              <table class="participants-table">
+                <thead>
+                  <tr>
+                    <th>Hero</th>
+                    <th>Damage</th>
+                    <th>Attacks</th>
+                  </tr>
+                </thead>
+                <tbody id="raid-participants-tbody">
+                  <tr>
+                    <td colspan="3" style="text-align: center; color: var(--text-muted);">No attacks registered yet in this raid.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Live Combat Activity Feed -->
+          <div class="raid-feed-box">
+            <h4 style="margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+              <span>📜</span> Live Activity Feed
+            </h4>
+            <div id="raid-feed-list">
+              <div class="feed-item" style="color: var(--text-muted);">Listening for game events...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- VIEW 4: LEADERBOARD                                                -->
+    <!-- ------------------------------------------------------------------ -->
+    <section id="view-leaderboard" class="view-panel">
+      <div class="section-header">
+        <h2>Hall of <span class="text-gradient">Banana Champions</span></h2>
+        <p>Rankings of top heroes evaluated by total score, boss damage, and puzzles solved.</p>
+      </div>
+
+      <!-- Top 3 Podium Cards -->
+      <div class="podium-container" id="leaderboard-podium">
+        <!-- Dynamic Top 3 rendered by JS -->
+      </div>
+
+      <!-- Full Rankings Table -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3>Global Standings</h3>
+          <button id="btn-refresh-leaderboard" class="btn btn-outline btn-sm">
+            <span>🔄</span> Refresh
+          </button>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Total Score</th>
+                <th>Puzzles Solved</th>
+                <th>Boss Damage</th>
+                <th>Last Active</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 30px;">Loading global leaderboard...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- VIEW 5: ARCHITECTURE & ASSIGNMENT THEMES EVIDENCE                  -->
+    <!-- ------------------------------------------------------------------ -->
+    <section id="view-evidence" class="view-panel">
+      <div class="section-header">
+        <h2>CIS046-3 Enterprise <span class="text-gradient">Themes & Architecture</span></h2>
+        <p>Documentation and technical evidence demonstrating the four required themes for assessment review.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 16px; color: var(--banana-yellow);">University of Bedfordshire Assignment Alignment</h3>
+        
+        <div class="theme-pill-grid">
+          <!-- Theme A -->
+          <div class="theme-pill">
+            <strong>A. Version Control</strong>
+            <p>Git repository with organized modular structure, clear commits, and feature branch workflow (<code>develop</code> / <code>main</code>). Encapsulation across routes, controllers, models, and services.</p>
+          </div>
+
+          <!-- Theme B -->
+          <div class="theme-pill">
+            <strong>B. Event-Driven Programming</strong>
+            <p>Client-side DOM event listeners, REST polling timers, and server-side Node.js <code>EventEmitter</code> publishing user, puzzle, and boss raid lifecycle events.</p>
+          </div>
+
+          <!-- Theme C -->
+          <div class="theme-pill">
+            <strong>C. Interoperability</strong>
+            <p>Official Banana API integration (<a href="https://marcconrad.com/uob/banana/doc.php" target="_blank" style="color: var(--cyan-neon);">doc.php</a>). Server-side HTTP fetch, AbortController timeouts, procedural fallbacks, and server-validated solutions that never expose answers to the browser.</p>
+          </div>
+
+          <!-- Theme D -->
+          <div class="theme-pill">
+            <strong>D. Virtual Identity</strong>
+            <p>User registration, email/username validation, bcryptjs password hashing, persistent SQLite session store, secure cookies, and protected Express routes.</p>
+          </div>
+        </div>
+
+        <div class="academic-card">
+          <h4>Enterprise Software Stack Overview</h4>
+          <ul style="padding-left: 20px; margin-top: 10px; color: var(--text-secondary);">
+            <li><strong>Frontend:</strong> Semantic HTML5, Modular CSS3 (Custom Properties, Keyframes, Flexbox/Grid), Vanilla ES6 JavaScript (Zero frontend frameworks).</li>
+            <li><strong>Backend Server:</strong> Node.js, Express.js REST API with controller-service architecture.</li>
+            <li><strong>Database:</strong> Native SQLite (<code>node:sqlite</code>) with Write-Ahead Logging (WAL) and foreign key enforcement.</li>
+            <li><strong>Security:</strong> Parameterised SQL queries, bcrypt hashing, HttpOnly session cookies, server-side answer evaluation.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================================================================== -->
+  <!-- AUTHENTICATION MODAL (LOGIN & REGISTRATION)                           -->
+  <!-- ====================================================================== -->
+  <div id="auth-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+    <div class="modal-content">
+      <button class="modal-close-btn" id="btn-close-auth-modal" aria-label="Close dialog">&times;</button>
+      
+      <!-- Tab Headers -->
+      <div class="auth-tabs">
+        <button id="tab-login" class="auth-tab-btn active">Sign In</button>
+        <button id="tab-register" class="auth-tab-btn">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="form-login">
+        <h3 id="auth-modal-title" style="margin-bottom: 16px;">Welcome Back!</h3>
+        
+        <div class="form-group">
+          <label for="login-username">Username or Email</label>
+          <input type="text" id="login-username" class="form-control" placeholder="Enter username or email" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required autocomplete="current-password">
+        </div>
+
+        <div id="login-error-msg" class="form-error-msg"></div>
+
+        <button type="submit" id="btn-submit-login" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+          <span>🔑</span> Sign In
+        </button>
+      </form>
+
+      <!-- Registration Form -->
+      <form id="form-register" style="display: none;">
+        <h3 style="margin-bottom: 16px;">Create Adventurer Account</h3>
+        
+        <div class="form-group">
+          <label for="reg-username">Username (3-20 characters)</label>
+          <input type="text" id="reg-username" class="form-control" placeholder="e.g. BananaKnight" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">Email Address</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="e.g. hero@bedfordshire.ac.uk" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Password (min 6 characters)</label>
+          <input type="password" id="reg-password" class="form-control" placeholder="Choose a secure password" required autocomplete="new-password">
+        </div>
+
+        <div class="form-group">
+          <label for="reg-confirm-password">Confirm Password</label>
+          <input type="password" id="reg-confirm-password" class="form-control" placeholder="Repeat your password" required autocomplete="new-password">
+        </div>
+
+        <div id="register-error-msg" class="form-error-msg"></div>
+
+        <button type="submit" id="btn-submit-register" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+          <span>🚀</span> Create Account
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====================================================================== -->
+  <!-- FOOTER                                                                 -->
+  <!-- ====================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>🍌 <strong>Banana Boss Raid</strong> &copy; 2026. University of Bedfordshire CIS046-3 Software For Enterprise.</p>
+      <p style="margin-top: 6px; font-size: 0.8rem;">
+        Powered by Node.js, Express, SQLite &amp; Dr. Marc Conrad's <a href="https://marcconrad.com/uob/banana/doc.php" target="_blank" rel="noopener">Banana API</a>.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ====================================================================== -->
+  <!-- JAVASCRIPT APPLICATION MODULES                                         -->
+  <!-- ====================================================================== -->
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/puzzle.js"></script>
+  <script src="js/boss.js"></script>
+  <script src="js/leaderboard.js"></script>
+</body>
+</html>
